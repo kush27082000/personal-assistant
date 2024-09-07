@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Assistant</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #3f5bd9;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .chat-log {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+        }
+
+        .bot-response {
+            background-color: #fff;
+            align-self: flex-start;
+        }
+
+        .chat-input {
+            display: flex;
+            background-color: #ece5dd;
+            padding: 10px 10px 10px 10px;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        #send-button {
+            border: none;
+            background-color: #3f5bd9;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #send-button:hover {
+            background-color: #075e54;
+        }
+          /* Add this CSS to style your buttons */
+        .scheme-button {
+           background-color: #128c7e;
+           color: #fff;
+           padding: 10px 20px;
+           border-radius: 20px;
+           cursor: pointer;
+           border: none;
+           margin: 5px; /* Add some spacing between buttons */
+           transition: background-color 0.3s; /* Add a smooth transition effect for hover */
+        }
+
+        .scheme-button:hover {
+           background-color: #075e54; /* Darker color on hover */
+         }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Personal Assistant</h1>
+        </div>
+        <div class="chat-log" id="chat-log">
+            <!-- Chat messages and scheme buttons will be displayed here -->
+            <div class="scheme-buttons" id="scheme-buttons">
+                <!-- Scheme buttons will be added here dynamically  -->
+           </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <!-- <div class="scheme-buttons" id="scheme-buttons">
+                 Scheme buttons will be added here dynamically 
+            </div> -->
+            <button id="send-button">Send</button>
+        </div>
+        <!-- <div class="scheme-buttons" id="scheme-buttons">
+            Scheme buttons will be added here dynamically 
+        </div> -->
+    </div>
+
+    <script>
+        const chatLog = document.getElementById("chat-log");
+        const userInput = document.getElementById("user-input");
+        const sendButton = document.getElementById("send-button");
+        const schemeButtons = document.getElementById("scheme-buttons");
+
+        // Function to add a user message to the chat log
+        function addUserMessage(message) {
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("user-message");
+            userMessage.textContent = message;
+            chatLog.appendChild(userMessage);
+        }
+
+        // Function to add a bot response with scheme buttons to the chat log
+        function addBotResponseWithSchemes(message, schemes, ordertype, schemename, amount) {
+            const botResponse = document.createElement("div");
+            botResponse.classList.add("bot-response");
+            botResponse.textContent = message;
+            chatLog.appendChild(botResponse);
+
+            // Add scheme buttons
+            schemes.forEach((scheme) => {
+                const schemeButton = document.createElement("button");
+                schemeButton.classList.add("scheme-button");
+                schemeButton.textContent = scheme.schemeName;
+                schemeButton.addEventListener("click", () => {
+                    // Handle scheme selection
+                    handleSchemeSelection(scheme, ordertype, schemename, amount);
+                });
+                chatLog.appendChild(schemeButton);
+            });
+        }
+
+        // Function to handle scheme selection and send scheme_code and isin to the backend
+        async function handleSchemeSelection(scheme, ordertype, schemename, amount) {
+            console.log(scheme)
+            console.log("error occured here in thta")
+            // Send scheme_code and isin to the backend
+            const response = await fetch("http://localhost:8080/scheme-details", {
+                method: "POST",
+                body: JSON.stringify({
+                    schemeCode: scheme.schemeCode,
+                    isin: scheme.isin,
+                    ordertype: ordertype,
+                    schemename: schemename,
+                    amount: amount
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("error occured here in afte that also ??")
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log("error occured here response")
+
+                // Handle the response as needed
+            const message = responseData.message;
+            const botResponse = document.createElement("div");
+            botResponse.classList.add("bot-response");
+            botResponse.textContent = message;
+            chatLog.appendChild(botResponse);
+
+
+                
+                console.log(responseData);
+            } else {
+                console.error("Failed to communicate with the backend.");
+            }
+        }
+
+        // Function to handle user input and send it to the Go backend
+        async function handleUserInput() {
+            const userMessage = userInput.value;
+            if (!userMessage) return;
+
+            // Display the user's message
+            addUserMessage(userMessage);
+
+            // Send the user's message to the Go backend
+            const response = await fetch("http://localhost:8080/witai", {
+                method: "POST",
+                body: JSON.stringify({ message: userMessage }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                const botMessage = responseData.message;
+                const schemes = responseData.schemes;
+                const  ordertype = responseData.ordertype
+                const schemename = responseData.schemename
+                const amount = responseData.amount
+
+                console.log(ordertype)
+                console.log(schemename)
+                console.log(amount)
+
+                // Display the bot's response with scheme buttons
+                addBotResponseWithSchemes(botMessage, schemes, ordertype, schemename, amount);
+            } else {
+                console.error("Failed to communicate with the backend.");
+            }
+
+            // Clear the user input field
+            userInput.value = "";
+        }
+
+        // Event listener for sending user input
+        sendButton.addEventListener("click", handleUserInput);
+        userInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                handleUserInput();
+            }
+        });
+    </script>
+</body>
+</html>
+<!-- primary -->

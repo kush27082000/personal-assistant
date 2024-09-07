@@ -1,0 +1,125 @@
+/* Reset some default styles */
+body, h1, p, button, input {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Set a background color for the page */
+body {
+    background-color: #f4f4f4;
+}
+
+/* Style the chat container */
+.chat-container {
+    width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the chat header */
+.chat-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Style the chat log */
+.chat-log {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px 10px 10px 10px;
+}
+
+/* Style user messages */
+.user-message {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 10px;
+    max-width: 70%;
+    word-wrap: break-word;
+    float: right;
+    clear: both;
+}
+
+/* Style bot responses */
+.bot-response {
+    background-color: #eee;
+    color: #333;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    max-width: 70%;
+    word-wrap: break-word;
+    float: left;
+    clear: both;
+}
+
+/* Style the input field and send button */
+.chat-input {
+    padding: 10px 10px 10px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+}
+
+#send-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#send-button:hover {
+    background-color: #0056b3;
+}
+
+/* Style scheme buttons */
+.scheme-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-right: 5px;
+}
+
+.scheme-button:hover {
+    background-color: #0056b3;
+}
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .user-message, .bot-response {
+        max-width: 100%;
+    }
+}
