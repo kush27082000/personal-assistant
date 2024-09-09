@@ -61,6 +61,3 @@ https://drive.google.com/open?id=1mH4CXLE97eRlObFme6PGUZFwy_ERxAkX-bIevZMH-34
 
 ### Demo Video
    ![PA-DEMO](./personal_assistant.gif)
-   
-   For a video version, please check this (accessible to anyone within Angel Broking) - 
-   https://drive.google.com/file/d/1dbazj73PNTm0Ri6unX1ccfO_OjEQRSL-/view?usp=drive_link
